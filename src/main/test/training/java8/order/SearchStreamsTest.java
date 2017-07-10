@@ -78,7 +78,7 @@ public class SearchStreamsTest {
 		LocalDate yesterday = now().minusDays(1);
 		Order order1 = new Order().setTotalPrice(BigDecimal.ONE).setCreationDate(now());
 		Order order2 = new Order().setTotalPrice(BigDecimal.TEN).setCreationDate(yesterday);
-		assertEquals(yesterday, service.p5_getMaxPriceOrder(new Customer(order1, order2)).get().getCreationDate());
+		assertEquals(yesterday, service.p5_getMaxPriceOrder(new Customer(order1, order2)).get());
 	}
 	
 	@Test
