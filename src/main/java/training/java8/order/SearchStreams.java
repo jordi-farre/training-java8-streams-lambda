@@ -1,5 +1,6 @@
 package training.java8.order;
 
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Comparator;
@@ -63,10 +64,8 @@ public class SearchStreams {
 	 * - Challenge: return an Optional<creationDate>
 	 */
 	public Order p5_getMaxPriceOrder(Customer customer) {
-		return customer.getOrders().stream()
-                .max((Order o1, Order o2) -> {
-                        return o1.getTotalPrice().compareTo(o2.getTotalPrice());
-                    })
+        return customer.getOrders().stream()
+                .max(comparing(Order::getTotalPrice))
                 .orElse(null);
 	}
 	
