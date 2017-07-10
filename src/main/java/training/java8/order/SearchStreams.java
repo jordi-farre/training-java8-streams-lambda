@@ -6,6 +6,7 @@ import java.util.List;
 
 import training.java8.order.entity.Customer;
 import training.java8.order.entity.Order;
+import training.java8.order.entity.OrderLine;
 
 public class SearchStreams {
 	
@@ -49,7 +50,8 @@ public class SearchStreams {
 	 * any OrderLine with isSpecialOffer()==true
 	 */
 	public boolean p4_canBeReturned(Order order) {
-		return true; // order.getOrderLines().stream() 
+	    return order.getOrderLines().stream()
+                .noneMatch(OrderLine::isSpecialOffer);
 	}
 	
 	// ---------- select the best ------------
