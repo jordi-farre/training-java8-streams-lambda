@@ -76,8 +76,9 @@ public class SearchStreams {
      * - Review thenComparing
 	 */
 	public List<Order> p6_getLast3Orders(Customer customer) {
-		return customer.getOrders().stream()
-                .sorted(comparing(Order::getCreationDate).reversed())
+        Comparator<Order> creationDateDesc = comparing(Order::getCreationDate).reversed();
+        return customer.getOrders().stream()
+                .sorted(creationDateDesc)
                 .limit(3)
                 .collect(toList());
 	}
