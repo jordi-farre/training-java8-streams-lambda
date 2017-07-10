@@ -22,12 +22,10 @@ public class SearchStreams {
 	 */
 	public List<Order> p1_getActiveOrders(Customer customer) {
 		return customer.getOrders().stream()
-                .filter(new Predicate<Order>() {
-                    @Override
-                    public boolean test(Order order) {
+                .filter((Order order) -> {
                         return order.getStatus().equals(Order.Status.ACTIVE);
                     }
-                })
+                )
                 .collect(toList());
 	}
 	
