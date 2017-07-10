@@ -3,7 +3,6 @@ package training.java8.order;
 import static java.util.stream.Collectors.toList;
 
 import java.util.List;
-import java.util.function.Predicate;
 
 import training.java8.order.entity.Customer;
 import training.java8.order.entity.Order;
@@ -22,11 +21,11 @@ public class SearchStreams {
 	 */
 	public List<Order> p1_getActiveOrders(Customer customer) {
 		return customer.getOrders().stream()
-                .filter((order) -> order.getStatus().equals(Order.Status.ACTIVE))
+                .filter(Order::isActive)
                 .collect(toList());
 	}
-	
-	/**
+
+    /**
 	 * @return the Order in the list with the given id  
 	 * - ...Any or ...First ?
 	 * - what do you do when you don't find it ? null/throw/Optional ?
