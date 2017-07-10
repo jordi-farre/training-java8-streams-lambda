@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import training.java8.order.entity.Customer;
 import training.java8.order.entity.Order;
@@ -63,10 +64,9 @@ public class SearchStreams {
 	 * i.e. the most expensive Order, or null if no Orders
 	 * - Challenge: return an Optional<creationDate>
 	 */
-	public Order p5_getMaxPriceOrder(Customer customer) {
+	public Optional<Order> p5_getMaxPriceOrder(Customer customer) {
         return customer.getOrders().stream()
-                .max(comparing(Order::getTotalPrice))
-                .orElse(null);
+                .max(comparing(Order::getTotalPrice));
 	}
 	
 	/**
