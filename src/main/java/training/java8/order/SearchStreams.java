@@ -64,12 +64,9 @@ public class SearchStreams {
 	 */
 	public Order p5_getMaxPriceOrder(Customer customer) {
 		return customer.getOrders().stream()
-                .max(new Comparator<Order>() {
-                    @Override
-                    public int compare(Order o1, Order o2) {
+                .max((Order o1, Order o2) -> {
                         return o1.getTotalPrice().compareTo(o2.getTotalPrice());
-                    }
-                })
+                    })
                 .orElse(null);
 	}
 	
