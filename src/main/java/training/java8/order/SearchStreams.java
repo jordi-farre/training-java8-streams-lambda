@@ -3,6 +3,7 @@ package training.java8.order;
 import static java.util.stream.Collectors.toList;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import training.java8.order.entity.Customer;
 import training.java8.order.entity.Order;
@@ -20,7 +21,14 @@ public class SearchStreams {
 	 * - shorten/clean it up
 	 */
 	public List<Order> p1_getActiveOrders(Customer customer) {
-		return customer.getOrders().stream().collect(toList()); 
+		return customer.getOrders().stream()
+                .filter(new Predicate<Order>() {
+                    @Override
+                    public boolean test(Order order) {
+                        return order.getStatus().equals(Order.Status.ACTIVE);
+                    }
+                })
+                .collect(toList());
 	}
 	
 	/**
