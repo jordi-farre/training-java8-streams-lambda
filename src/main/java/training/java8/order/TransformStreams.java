@@ -3,11 +3,7 @@ package training.java8.order;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -53,7 +49,9 @@ public class TransformStreams {
      * Note: Order.getCreationDate()
      */
     public SortedSet<LocalDate> p03_getOrderDatesAscending(Customer customer) {
-        return null;
+        return customer.getOrders().stream()
+                .map(Order::getCreationDate)
+                .collect(toCollection(TreeSet::new));
     }
 
 
