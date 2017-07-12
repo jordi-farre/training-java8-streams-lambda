@@ -67,7 +67,8 @@ public class TransformStreams {
      * Orders grouped by Order.paymentMethod
      */
     public Map<PaymentMethod, List<Order>> p05_getProductsByPaymentMethod(Customer customer) {
-        return null;
+        return customer.getOrders().stream()
+                .collect(groupingBy(Order::getPaymentMethod));
     }
 
     // -------------- MOVIE BREAK :p --------------------
