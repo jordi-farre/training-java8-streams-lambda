@@ -121,8 +121,8 @@ public class TransformStreams {
     public Long p09_getApproximateTotalOrdersPrice(Customer customer) {
         return customer.getOrders().stream()
                 .map(Order::getTotalPrice)
-                .mapToLong(BigDecimal::longValue)
-                .sum();
+                .reduce(ZERO, BigDecimal::add)
+                .longValue();
     }
 
     // ----------- IO ---------------
