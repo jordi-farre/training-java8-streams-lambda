@@ -14,6 +14,7 @@ import training.java8.order.entity.Order.PaymentMethod;
 import training.java8.order.entity.OrderLine;
 import training.java8.order.entity.Product;
 
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.*;
 
 public class TransformStreams {
@@ -91,7 +92,12 @@ public class TransformStreams {
      * sorted by Product.name.
      */
     public List<Product> p07_getAllOrderedProducts(Customer customer) {
-        return null;
+        return customer.getOrders().stream()
+                .flatMap(o -> o.getOrderLines().stream())
+                .map(OrderLine::getProduct)
+                .distinct()
+                .sorted(comparing(Product::getName))
+                .collect(toList());
     }
 
 
@@ -102,7 +108,9 @@ public class TransformStreams {
      * Hint: Reuse the previous function.
      */
     public String p08_getProductsJoined(Customer customer) {
-        return null;
+        return p07_getAllOrderedProducts(customer).stream()
+                .map(Product::getName)
+                .collect(joining(","));
     }
 
     /**
