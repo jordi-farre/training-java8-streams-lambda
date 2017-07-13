@@ -3,6 +3,7 @@ package training.java8.order;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
@@ -134,16 +135,17 @@ public class TransformStreams {
      * - Validate the created OrderLine. Throw ? :S
      */
     public List<OrderLine> p10_readOrderFromFile(File file) throws IOException {
+        try (Stream<String> lines = Files.lines(file.toPath())) {
+            return lines.map(line -> line.split(";"))
+                    .filter(this::isAnOrderLine)
+                    .map(this::parseOrderLine)
+                    .peek(this::validateOrderLine)
+                    .collect(toList());
+        }
+    }
 
-        Stream<String> lines = null; // ??
-        //return lines
-        //.map(line -> line.split(";")) // Stream<String[]>
-        //.filter(cell -> "LINE".equals(cell[0]))
-        //.map(this::parseOrderLine) // Stream<OrderLine>
-        //.peek(this::validateOrderLine)
-        //.collect(toList());
-        return null;
-
+    private boolean isAnOrderLine(String[] representation) {
+        return "LINE".equals(representation[0]);
     }
 
     private OrderLine parseOrderLine(String[] cells) {
