@@ -29,11 +29,15 @@ public class DirtyLambdas {
 	public Set<Customer> getCustomersToNotifyOfOverdueOrders(List<Order> orders, LocalDate warningDate) {
 		return orders.stream()
 			.filter(order -> order.getDeliveryDueDate().isBefore(warningDate))
-			.filter(order -> order.getOrderLines().stream().anyMatch(OrderLine::isNotInStock))
+			.filter(this::hasLinesNotInStock)
 			.map(Order::getCustomer)
 			.collect(toSet());
 	}
-	
+
+	private boolean hasLinesNotInStock(Order order) {
+		return order.getOrderLines().stream().anyMatch(OrderLine::isNotInStock);
+	}
+
 	/**
 	 * No duplicate DTOs should be returned (cf sorting comparator).
 	 */
