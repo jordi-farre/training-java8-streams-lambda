@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 
 import training.java8.order.dto.AuditDto;
 import training.java8.order.entity.Customer;
@@ -28,10 +29,14 @@ public class DirtyLambdas {
 
 	public Set<Customer> getCustomersToNotifyOfOverdueOrders(List<Order> orders, LocalDate warningDate) {
 		return orders.stream()
-			.filter(order -> order.getDeliveryDueDate().isBefore(warningDate))
+			.filter(isDeliveryDueDateBefore(warningDate))
 			.filter(this::hasLinesNotInStock)
 			.map(Order::getCustomer)
 			.collect(toSet());
+	}
+
+	private Predicate<Order> isDeliveryDueDateBefore(LocalDate warningDate) {
+		return order -> order.getDeliveryDueDate().isBefore(warningDate);
 	}
 
 	private boolean hasLinesNotInStock(Order order) {
