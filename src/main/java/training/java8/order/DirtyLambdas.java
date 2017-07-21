@@ -51,18 +51,21 @@ public class DirtyLambdas {
 				Comparator.comparing(AuditDto::getDate).reversed().thenComparing(Comparator.comparing(AuditDto::getAction))
 						.thenComparing(Comparator.comparing(AuditDto::getUsername)));
 		audits.forEach(audit -> {
-			AuditDto dto = new AuditDto(); // extract mapping logic
-			dto.username = audit.getUser();
-			dto.date = audit.getDate();
-			dto.action = audit.getAction();
+			AuditDto dto = toAuditDto(audit);
 			dtos.add(dto);
 		});
 		return dtos;
 	}
-	
-	
 
-	
+	private AuditDto toAuditDto(Audit audit) {
+		AuditDto dto = new AuditDto(); // extract mapping logic
+		dto.username = audit.getUser();
+		dto.date = audit.getDate();
+		dto.action = audit.getAction();
+		return dto;
+	}
+
+
 	public List<Product> getProductsSortedByHits(List<Order> orders) {
 		List<OrderLine> lines1 = new ArrayList<>();
 		orders.stream()
