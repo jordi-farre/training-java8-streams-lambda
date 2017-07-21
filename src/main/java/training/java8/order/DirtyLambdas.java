@@ -31,7 +31,7 @@ public class DirtyLambdas {
 			.filter(order -> order.getDeliveryDueDate().isBefore(warningDate) && 
 							 order.getOrderLines().stream()
 							 	.anyMatch(line -> line.getStatus() != OrderLine.Status.IN_STOCK))
-			.map((Order o) -> {return o.getCustomer();})
+			.map(Order::getCustomer)
 			.collect(toSet());
 	}
 	
