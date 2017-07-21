@@ -1,5 +1,7 @@
 package training.java8.order.entity;
 
+import static training.java8.order.entity.OrderLine.Status.*;
+
 public class OrderLine {
 	
 	public enum Status {
@@ -30,6 +32,9 @@ public class OrderLine {
 		return this;
 	}
 
+	public boolean isNotInStock(){
+		return this.status != IN_STOCK;
+	}
 	public Product getProduct() {
 		return product;
 	}
