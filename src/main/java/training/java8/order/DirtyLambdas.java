@@ -47,8 +47,7 @@ public class DirtyLambdas {
      * No duplicate DTOs should be returned (cf sorting comparator).
      */
     public Collection<AuditDto> toDtos(List<Audit> audits) {
-        Set<AuditDto> dtos = new TreeSet<>(
-                getAuditDtoComparator());
+        Set<AuditDto> dtos = newTreeSetWith(auditDtoComparator());
 
         audits.forEach(audit -> {
             AuditDto dto = toAuditDto(audit);
@@ -57,9 +56,14 @@ public class DirtyLambdas {
         return dtos;
     }
 
-    private Comparator<AuditDto> getAuditDtoComparator() {
+    private Comparator<AuditDto> auditDtoComparator() {
         return comparing(AuditDto::getDate).reversed().thenComparing(comparing(AuditDto::getAction))
                 .thenComparing(comparing(AuditDto::getUsername));
+    }
+
+    private TreeSet<AuditDto> newTreeSetWith(Comparator<AuditDto> auditDtoComparator) {
+        return new TreeSet<>(
+                auditDtoComparator);
     }
 
     private AuditDto toAuditDto(Audit audit) {
