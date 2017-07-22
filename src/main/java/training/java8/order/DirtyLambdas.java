@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import training.java8.order.dto.AuditDto;
 import training.java8.order.entity.Customer;
@@ -50,17 +51,17 @@ public class DirtyLambdas {
     public Collection<AuditDto> toDtos(List<Audit> audits) {
         return audits.stream()
                 .map(this::toAuditDto)
-                .collect(toCollection(() -> newTreeSetWith(auditDtoComparator())));
+                .collect(toCollection(toTreeSetWith(auditDtoComparator())));
+    }
+
+    private Supplier<TreeSet<AuditDto>> toTreeSetWith(Comparator<AuditDto> auditDtoComparator) {
+        return () -> new TreeSet<>(auditDtoComparator);
     }
 
     private Comparator<AuditDto> auditDtoComparator() {
-        return comparing(AuditDto::getDate).reversed().thenComparing(comparing(AuditDto::getAction))
+        return comparing(AuditDto::getDate).reversed()
+                .thenComparing(comparing(AuditDto::getAction))
                 .thenComparing(comparing(AuditDto::getUsername));
-    }
-
-    private TreeSet<AuditDto> newTreeSetWith(Comparator<AuditDto> auditDtoComparator) {
-        return new TreeSet<>(
-                auditDtoComparator);
     }
 
     private AuditDto toAuditDto(Audit audit) {
