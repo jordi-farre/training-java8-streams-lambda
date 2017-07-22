@@ -48,13 +48,18 @@ public class DirtyLambdas {
      */
     public Collection<AuditDto> toDtos(List<Audit> audits) {
         Set<AuditDto> dtos = new TreeSet<>(
-                Comparator.comparing(AuditDto::getDate).reversed().thenComparing(Comparator.comparing(AuditDto::getAction))
-                        .thenComparing(Comparator.comparing(AuditDto::getUsername)));
+                getAuditDtoComparator());
+
         audits.forEach(audit -> {
             AuditDto dto = toAuditDto(audit);
             dtos.add(dto);
         });
         return dtos;
+    }
+
+    private Comparator<AuditDto> getAuditDtoComparator() {
+        return comparing(AuditDto::getDate).reversed().thenComparing(comparing(AuditDto::getAction))
+                .thenComparing(comparing(AuditDto::getUsername));
     }
 
     private AuditDto toAuditDto(Audit audit) {
