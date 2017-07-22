@@ -1,6 +1,7 @@
 package training.java8.order;
 
 import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
 
 import java.time.LocalDate;
@@ -53,7 +54,9 @@ public class DirtyLambdas {
             AuditDto dto = toAuditDto(audit);
             dtos.add(dto);
         });
-        return dtos;
+        return audits.stream()
+                .map(this::toAuditDto)
+                .collect(toCollection(() -> newTreeSetWith(auditDtoComparator())));
     }
 
     private Comparator<AuditDto> auditDtoComparator() {
