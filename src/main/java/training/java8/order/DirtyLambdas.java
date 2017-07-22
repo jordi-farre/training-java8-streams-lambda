@@ -51,17 +51,7 @@ public class DirtyLambdas {
     public Collection<AuditDto> toDtos(List<Audit> audits) {
         return audits.stream()
                 .map(this::toAuditDto)
-                .collect(toCollection(toTreeSetWith(auditDtoComparator())));
-    }
-
-    private Supplier<TreeSet<AuditDto>> toTreeSetWith(Comparator<AuditDto> auditDtoComparator) {
-        return () -> new TreeSet<>(auditDtoComparator);
-    }
-
-    private Comparator<AuditDto> auditDtoComparator() {
-        return comparing(AuditDto::getDate).reversed()
-                .thenComparing(comparing(AuditDto::getAction))
-                .thenComparing(comparing(AuditDto::getUsername));
+                .collect(toCollection(TreeSet::new));
     }
 
     private AuditDto toAuditDto(Audit audit) {
