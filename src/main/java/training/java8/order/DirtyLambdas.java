@@ -48,12 +48,6 @@ public class DirtyLambdas {
      * No duplicate DTOs should be returned (cf sorting comparator).
      */
     public Collection<AuditDto> toDtos(List<Audit> audits) {
-        Set<AuditDto> dtos = newTreeSetWith(auditDtoComparator());
-
-        audits.forEach(audit -> {
-            AuditDto dto = toAuditDto(audit);
-            dtos.add(dto);
-        });
         return audits.stream()
                 .map(this::toAuditDto)
                 .collect(toCollection(() -> newTreeSetWith(auditDtoComparator())));
