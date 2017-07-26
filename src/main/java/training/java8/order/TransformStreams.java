@@ -118,7 +118,7 @@ public class TransformStreams {
 		//return customer.getOrders().stream()
 		//		.collect(Collectors.summingLong(order -> order.getTotalPrice().longValue()));
 		return customer.getOrders().stream()
-				.mapToLong(order -> Long.valueOf(order.getTotalPrice().longValue()))
+				.mapToLong(order -> order.getTotalPrice().longValue())
 				.reduce((total1, total2) -> total1 + total2).getAsLong();
 	}
 	
