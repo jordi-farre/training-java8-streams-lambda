@@ -7,11 +7,8 @@ import static java.util.stream.Collectors.toMap;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import training.java8.order.dto.OrderDto;
@@ -106,7 +103,12 @@ public class TransformStreams {
 	 * Hint: Reuse the previous function.
 	 */
 	public String p08_getProductsJoined(Customer customer) {
-		return null; 
+		return customer.getOrders().stream()
+				.flatMap(order -> order.getOrderLines().stream())
+				.sorted(Comparator.comparing(orderLine -> orderLine.getProduct().getName()))
+				.map(orderLine -> orderLine.getProduct().getName())
+				.distinct()
+				.collect(Collectors.joining(","));
 	}
 	
 	/**
