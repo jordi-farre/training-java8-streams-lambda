@@ -1,6 +1,7 @@
 package training.java8.order;
 
 import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.*;
 import static java.util.stream.Collectors.toSet;
 
 import java.time.LocalDate;
@@ -13,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import training.java8.order.dto.AuditDto;
 import training.java8.order.entity.Customer;
@@ -39,19 +41,20 @@ public class DirtyLambdas {
 	 * No duplicate DTOs should be returned (cf sorting comparator).
 	 */
 	public Collection<AuditDto> toDtos(List<Audit> audits) {
-		Set<AuditDto> dtos = new TreeSet<>(
-				Comparator.comparing(AuditDto::getDate).reversed().thenComparing(Comparator.comparing(AuditDto::getAction))
-						.thenComparing(Comparator.comparing(AuditDto::getUsername)));
-		audits.forEach(audit -> {
-			AuditDto dto = new AuditDto(); // extract mapping logic
-			dto.username = audit.getUser();
-			dto.date = audit.getDate();
-			dto.action = audit.getAction();
-			dtos.add(dto);
-		});
-		return dtos;
+		return audits.stream()
+				.map(this::buildAuditDto)
+				.collect(toCollection(() -> new TreeSet<>(Comparator.comparing(AuditDto::getDate).reversed().thenComparing(AuditDto::getAction)
+						.thenComparing(AuditDto::getUsername))));
 	}
-	
+
+	private AuditDto buildAuditDto(Audit audit) {
+		AuditDto dto = new AuditDto(); // extract mapping logic
+		dto.username = audit.getUser();
+		dto.date = audit.getDate();
+		dto.action = audit.getAction();
+		return dto;
+	}
+
 	
 
 	
