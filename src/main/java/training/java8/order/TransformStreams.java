@@ -1,13 +1,10 @@
 package training.java8.order;
 
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toMap;
-
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -17,6 +14,8 @@ import training.java8.order.entity.Order;
 import training.java8.order.entity.Order.PaymentMethod;
 import training.java8.order.entity.OrderLine;
 import training.java8.order.entity.Product;
+
+import static java.util.stream.Collectors.*;
 
 public class TransformStreams {
 
@@ -77,14 +76,9 @@ public class TransformStreams {
 	 * i.e. SELECT PROD_ID, SUM(COUNT) FROM PROD GROUPING BY PROD_ID
 	 */
 	public Map<Product, Long> p06_getProductCount(Customer customer) {
-		
-		List<OrderLine> allLines = new ArrayList<>();
-		
-		for (Order order : customer.getOrders()) {
-			allLines.addAll(order.getOrderLines());
-		}
-		return null; 
-		
+		 return customer.getOrders().stream()
+				.flatMap(order -> order.getOrderLines().stream())
+				.collect(groupingBy(OrderLine::getProduct, summingLong(OrderLine::getCount)));
 	}
 	
 	/**
