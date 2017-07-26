@@ -105,10 +105,17 @@ public class TransformStreams {
 	public String p08_getProductsJoined(Customer customer) {
 		return customer.getOrders().stream()
 				.flatMap(order -> order.getOrderLines().stream())
-				.sorted(Comparator.comparing(orderLine -> orderLine.getProduct().getName()))
-				.map(orderLine -> orderLine.getProduct().getName())
+				.map(OrderLine::getProduct)
+				.sorted(Comparator.comparing(Product::getName))
+				.map(Product::getName)
 				.distinct()
-				.collect(Collectors.joining(","));
+				.reduce((name, name2) -> name + "," + name2).get();
+		//return customer.getOrders().stream()
+		//		.flatMap(order -> order.getOrderLines().stream())
+		//		.sorted(Comparator.comparing(orderLine -> orderLine.getProduct().getName()))
+		//		.map(orderLine -> orderLine.getProduct().getName())
+		//		.distinct()
+		//		.collect(Collectors.joining(","));
 	}
 	
 	/**
