@@ -16,6 +16,7 @@ import training.java8.order.entity.OrderLine;
 import training.java8.order.entity.Product;
 
 import static java.util.Arrays.asList;
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.*;
 
 public class TransformStreams {
@@ -90,7 +91,7 @@ public class TransformStreams {
 		return customer.getOrders().stream()
 				.flatMap(order -> order.getOrderLines().stream())
 				.map(OrderLine::getProduct)
-				.sorted(Comparator.comparing(Product::getName))
+				.sorted(comparing(Product::getName))
 				.distinct()
 				.collect(toList());
 	}
@@ -106,27 +107,28 @@ public class TransformStreams {
 		return customer.getOrders().stream()
 				.flatMap(order -> order.getOrderLines().stream())
 				.map(OrderLine::getProduct)
-				.sorted(Comparator.comparing(Product::getName))
-				.map(Product::getName)
 				.distinct()
+				.sorted(comparing(Product::getName))
+				.map(Product::getName)
 				.reduce((name, name2) -> name + "," + name2).get();
 		//return customer.getOrders().stream()
 		//		.flatMap(order -> order.getOrderLines().stream())
-		//		.sorted(Comparator.comparing(orderLine -> orderLine.getProduct().getName()))
-		//		.map(orderLine -> orderLine.getProduct().getName())
+		//		.map(OrderLine::getProduct)
 		//		.distinct()
-		//		.collect(Collectors.joining(","));
+		//		.sorted(comparing(Product::getName))
+		//		.map(Product::getName)
+		//		.collect(joining(","));
 	}
 	
 	/**
 	 * Sum of all Order.getTotalPrice(), truncated to Long.
 	 */
 	public Long p09_getApproximateTotalOrdersPrice(Customer customer) {
-		//return customer.getOrders().stream()
-		//		.collect(Collectors.summingLong(order -> order.getTotalPrice().longValue()));
 		return customer.getOrders().stream()
-				.mapToLong(order -> order.getTotalPrice().longValue())
-				.reduce((total1, total2) -> total1 + total2).getAsLong();
+				.map(order -> order.getTotalPrice().longValue())
+				.reduce((total1, total2) -> total1 + total2).get();
+		//return customer.getOrders().stream()
+		//		.collect(summingLong(order -> order.getTotalPrice().longValue()));
 	}
 	
 	// ----------- IO ---------------
