@@ -115,8 +115,11 @@ public class TransformStreams {
 	 * Sum of all Order.getTotalPrice(), truncated to Long.
 	 */
 	public Long p09_getApproximateTotalOrdersPrice(Customer customer) {
+		//return customer.getOrders().stream()
+		//		.collect(Collectors.summingLong(order -> order.getTotalPrice().longValue()));
 		return customer.getOrders().stream()
-				.collect(Collectors.summingLong(order -> order.getTotalPrice().longValue()));
+				.mapToLong(order -> Long.valueOf(order.getTotalPrice().longValue()))
+				.reduce((total1, total2) -> total1 + total2).getAsLong();
 	}
 	
 	// ----------- IO ---------------
