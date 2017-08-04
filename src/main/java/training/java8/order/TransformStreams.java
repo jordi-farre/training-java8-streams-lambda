@@ -2,6 +2,8 @@ package training.java8.order;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
@@ -140,15 +142,14 @@ public class TransformStreams {
 	 * - Validate the created OrderLine. Throw ? :S
 	 */
 	public List<OrderLine> p10_readOrderFromFile(File file) throws IOException {
-		
-		Stream<String> lines = null; // ??
-		//return lines
-		//.map(line -> line.split(";")) // Stream<String[]>
-		//.filter(cell -> "LINE".equals(cell[0]))
-		//.map(this::parseOrderLine) // Stream<OrderLine>
-		//.peek(this::validateOrderLine)
-		//.collect(toList());
-		return null;
+		try (Stream<String> lines = Files.lines(Paths.get(file.toURI()))) {
+			return lines
+					.map(line -> line.split(";")) // Stream<String[]>
+					.filter(cell -> "LINE".equals(cell[0]))
+					.map(this::parseOrderLine) // Stream<OrderLine>
+					.peek(this::validateOrderLine)
+					.collect(toList());
+		}
 		
 	}
 	
